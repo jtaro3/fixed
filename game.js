@@ -10,6 +10,7 @@ const scoreDisplay = document.querySelector('#scoreDisplay');
 const threatDisplay = document.querySelector('#threatDisplay');
 const finalScore = document.querySelector('#finalScore');
 const difficultyButtons = [...document.querySelectorAll('.difficulty')];
+const viewportMeta = document.querySelector('meta[name="viewport"]');
 
 // ここを変えるだけで、難易度ごとの最大数や出現間隔を調整できます。
 const DIFFICULTIES = {
@@ -42,6 +43,14 @@ const state = {
 };
 
 function settings() { return DIFFICULTIES[state.difficulty]; }
+
+function setGameZoomLock(locked) {
+  // プレイ中だけ拡大を止め、終了後は通常のブラウザ操作へ戻す。
+  viewportMeta.setAttribute('content', locked
+    ? 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+    : 'width=device-width, initial-scale=1.0');
+  document.body.classList.toggle('game-active', locked);
+}
 
 function resizeCanvas() {
   const rect = arena.getBoundingClientRect();
@@ -138,6 +147,7 @@ function draw(now = performance.now()) {
 function endGame() {
   state.playing = false;
   state.paused = false;
+  setGameZoomLock(false);
   finalScore.textContent = state.score;
   gameOverOverlay.classList.remove('hidden');
   startButton.textContent = 'ゲームを開始 →';
@@ -177,6 +187,7 @@ function startGame() {
   state.paused = false;
   state.elapsed = 0;
   state.spawnElapsed = 0;
+  setGameZoomLock(true);
   spawnEnemy();
   startOverlay.classList.add('hidden');
   gameOverOverlay.classList.add('hidden');
