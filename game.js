@@ -18,6 +18,15 @@ const DIFFICULTIES = {
   hard: { label: 'HARD', maxEnemies: 7, spawnEvery: 4200, speed: 49 },
 };
 
+// 敵の現在耐久値ごとの表示色。攻撃を受けると耐久が1減り、色も変わります。
+const ENEMY_COLORS = {
+  1: '#54a6ff',
+  2: '#62d98b',
+  3: '#ffd85b',
+  4: '#ff6678',
+  5: '#abb5c6',
+};
+
 const state = {
   difficulty: 'normal',
   enemies: [],
@@ -69,7 +78,12 @@ function spawnEnemy() {
   }
 
   if (!candidate) return;
-  state.enemies.push({ ...candidate, radius: enemyRadius, pulse: Math.random() * Math.PI * 2 });
+  state.enemies.push({
+    ...candidate,
+    radius: enemyRadius,
+    health: Math.floor(Math.random() * 5) + 1,
+    pulse: Math.random() * Math.PI * 2,
+  });
   updateHud();
 }
 
@@ -101,13 +115,25 @@ function drawCore(c, now) {
 
 function drawEnemy(enemy, now) {
   const size = enemy.radius * (1 + Math.sin(now / 170 + enemy.pulse) * .04);
+  const color = ENEMY_COLORS[enemy.health];
   ctx.save();
   ctx.translate(enemy.x, enemy.y);
   ctx.rotate(Math.PI / 4);
-  ctx.shadowBlur = 17; ctx.shadowColor = '#ff5d70';
-  ctx.strokeStyle = '#ff7180'; ctx.lineWidth = Math.max(3, size * .22); ctx.lineCap = 'round';
+  ctx.shadowBlur = 17; ctx.shadowColor = color;
+  ctx.strokeStyle = color; ctx.lineWidth = Math.max(3, size * .22); ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(-size, 0); ctx.lineTo(size, 0); ctx.moveTo(0, -size); ctx.lineTo(0, size); ctx.stroke();
   ctx.shadowBlur = 0;
+  ctx.restore();
+
+  // 色だけでなく数字でも、あと何回タップすれば破壊できるかを示す。
+  const badgeRadius = Math.max(9, size * .42);
+  const badgeX = enemy.x + size * .72;
+  const badgeY = enemy.y - size * .72;
+  ctx.save();
+  ctx.fillStyle = '#101827'; ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(badgeX, badgeY, badgeRadius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = color; ctx.font = `700 ${Math.max(10, badgeRadius)}px "DM Mono", monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(enemy.health, badgeX, badgeY + .5);
   ctx.restore();
 }
 
@@ -122,6 +148,7 @@ function endGame() {
   state.playing = false;
   finalScore.textContent = state.score;
   gameOverOverlay.classList.remove('hidden');
+  startButton.classList.remove('is-playing');
   startButton.textContent = 'ゲームを開始 →';
 }
 
@@ -156,9 +183,14 @@ function startGame() {
   state.playing = true;
   state.startedAt = performance.now();
   state.lastSpawnAt = state.startedAt;
+  spawnEnemy();
   startOverlay.classList.add('hidden');
   gameOverOverlay.classList.add('hidden');
   startButton.textContent = '防衛中…';
+  startButton.classList.add('is-playing');
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    arena.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
   updateHud();
 }
 
@@ -169,8 +201,12 @@ function tapEnemy(event) {
   const y = event.clientY - rect.top;
   const hitIndex = state.enemies.findIndex((enemy) => Math.hypot(enemy.x - x, enemy.y - y) <= enemy.radius * 1.45);
   if (hitIndex >= 0) {
-    state.enemies.splice(hitIndex, 1);
-    state.score += 1;
+    const enemy = state.enemies[hitIndex];
+    enemy.health -= 1;
+    if (enemy.health <= 0) {
+      state.enemies.splice(hitIndex, 1);
+      state.score += 1;
+    }
     updateHud();
   }
 }

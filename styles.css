@@ -35,7 +35,9 @@ button { font: inherit; }
 
 .app-shell { width: min(1200px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 36px; }
 .topbar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 27px; border-bottom: 1px solid var(--line); }
+.header-status { display: flex; align-items: center; gap: 13px; }
 .topbar p { margin: 0; color: var(--muted); font-family: "DM Mono", monospace; font-size: .72rem; letter-spacing: .08em; }
+.version-badge { padding: 5px 8px; color: #a8b6cb; font-family: "DM Mono", monospace; font-size: .61rem; letter-spacing: .08em; border: 1px solid var(--line); border-radius: 5px; background: rgba(255,255,255,.025); }
 .brand { font-size: 1.05rem; font-weight: 800; letter-spacing: .13em; }
 .brand-mark { color: var(--accent); font-size: 1.7rem; vertical-align: -3px; margin-right: 6px; }
 
@@ -55,6 +57,10 @@ button { font: inherit; }
 .rule-card p { margin: 9px 0; font-size: .79rem; line-height: 1.65; }
 .rule-card b { color: var(--danger); font-size: 1.2rem; }
 .quiet { color: var(--muted); }
+.durability-legend { display: flex; align-items: center; gap: 5px; margin: 10px 0 2px; }
+.durability-legend span { display: grid; width: 19px; height: 19px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-family: "DM Mono", monospace; font-size: .61rem; font-weight: 700; }
+.durability-legend small { margin-left: 3px; color: var(--muted); font-size: .66rem; }
+.hp-1 { color: #54a6ff; }.hp-2 { color: #62d98b; }.hp-3 { color: #ffd85b; }.hp-4 { color: #ff6678; }.hp-5 { color: #abb5c6; }
 .start-button, .retry-button { color: #06221e; font-weight: 800; letter-spacing: .04em; border: 0; cursor: pointer; background: var(--accent); transition: transform .18s, box-shadow .18s; }
 .start-button { width: 100%; padding: 14px; margin-top: auto; border-radius: 9px; }
 .start-button span { font-size: 1.2rem; margin-left: 7px; }
@@ -96,6 +102,7 @@ canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-act
   .difficulty strong { font-size: .69rem; }
   .difficulty small { font-size: .58rem; }
   .rule-card { display: none; }
-  .start-button { margin-top: 15px; }
+  .start-button { position: fixed; z-index: 10; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; margin: 0; box-shadow: 0 8px 27px rgba(0, 0, 0, .35); transition: transform .25s ease, opacity .2s ease; }
+  .start-button.is-playing { pointer-events: none; opacity: 0; transform: translateY(calc(100% + 25px)); }
   .arena { min-height: 410px; height: 60vh; }
 }
