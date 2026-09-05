@@ -1,0 +1,101 @@
+:root {
+  --ink: #ebf1ff;
+  --muted: #8794ab;
+  --line: rgba(177, 197, 229, .17);
+  --accent: #6ee7d1;
+  --danger: #ff5d70;
+  --panel: rgba(20, 31, 51, .86);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  font-family: Outfit, sans-serif;
+  background:
+    radial-gradient(circle at 72% 10%, rgba(50, 118, 149, .2), transparent 30rem),
+    radial-gradient(circle at 5% 80%, rgba(65, 196, 163, .09), transparent 24rem),
+    #0a101c;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .24;
+  background-image: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+button { font: inherit; }
+
+.app-shell { width: min(1200px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 36px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 27px; border-bottom: 1px solid var(--line); }
+.topbar p { margin: 0; color: var(--muted); font-family: "DM Mono", monospace; font-size: .72rem; letter-spacing: .08em; }
+.brand { font-size: 1.05rem; font-weight: 800; letter-spacing: .13em; }
+.brand-mark { color: var(--accent); font-size: 1.7rem; vertical-align: -3px; margin-right: 6px; }
+
+.game-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 28px; padding-top: 30px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 18px 60px rgba(0,0,0,.16); }
+.control-panel { padding: 21px; align-self: stretch; display: flex; flex-direction: column; }
+.eyebrow { display: block; color: var(--accent); font-family: "DM Mono", monospace; font-size: .65rem; letter-spacing: .15em; }
+.panel-heading h1 { font-size: 1.45rem; margin: 7px 0 19px; }
+.difficulty-list { display: grid; gap: 8px; }
+.difficulty { position: relative; display: grid; grid-template-columns: 30px 1fr; align-items: center; padding: 11px 10px; color: var(--muted); text-align: left; cursor: pointer; background: transparent; border: 1px solid transparent; border-radius: 9px; transition: .18s ease; }
+.difficulty:hover { background: rgba(255,255,255,.035); color: var(--ink); }
+.difficulty.selected { color: var(--ink); border-color: rgba(110, 231, 209, .55); background: rgba(110, 231, 209, .07); }
+.difficulty span { color: var(--accent); font-family: "DM Mono", monospace; font-size: .62rem; }
+.difficulty strong { letter-spacing: .09em; font-size: .8rem; }
+.difficulty small { grid-column: 2; color: var(--muted); font-size: .68rem; margin-top: 3px; }
+.rule-card { margin-top: 26px; padding-top: 21px; border-top: 1px solid var(--line); }
+.rule-card p { margin: 9px 0; font-size: .79rem; line-height: 1.65; }
+.rule-card b { color: var(--danger); font-size: 1.2rem; }
+.quiet { color: var(--muted); }
+.start-button, .retry-button { color: #06221e; font-weight: 800; letter-spacing: .04em; border: 0; cursor: pointer; background: var(--accent); transition: transform .18s, box-shadow .18s; }
+.start-button { width: 100%; padding: 14px; margin-top: auto; border-radius: 9px; }
+.start-button span { font-size: 1.2rem; margin-left: 7px; }
+.start-button:hover, .retry-button:hover { transform: translateY(-2px); box-shadow: 0 7px 22px rgba(110, 231, 209, .21); }
+
+.arena-column { min-width: 0; }
+.hud { display: flex; justify-content: space-between; margin-bottom: 13px; padding: 0 4px; }
+.hud-item { display: grid; gap: 3px; }
+.hud-item:nth-child(2) { text-align: center; }
+.hud-item:last-child { text-align: right; }
+.hud-item span { color: var(--muted); font-family: "DM Mono", monospace; font-size: .61rem; letter-spacing: .14em; }
+.hud-item strong { font-family: "DM Mono", monospace; font-size: 1.07rem; letter-spacing: .04em; }
+.arena { position: relative; overflow: hidden; height: min(65vh, 660px); min-height: 440px; border: 1px solid rgba(174, 211, 228, .27); border-radius: 16px; background: radial-gradient(circle at center, rgba(77, 147, 172, .13), transparent 36%), rgba(7, 15, 27, .88); box-shadow: inset 0 0 70px rgba(0,0,0,.28), 0 22px 60px rgba(0,0,0,.18); }
+.arena::before, .arena::after { content: ""; position: absolute; z-index: 1; pointer-events: none; }
+.arena::before { inset: 18px; border: 1px solid rgba(174, 211, 228, .12); border-radius: 9px; }
+.arena::after { inset: 0; opacity: .4; background-image: linear-gradient(rgba(113, 158, 180, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(113, 158, 180, .08) 1px, transparent 1px); background-size: 42px 42px; mask-image: radial-gradient(circle, black, transparent 82%); }
+canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: manipulation; }
+.overlay { position: absolute; z-index: 3; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(8, 16, 28, .59); backdrop-filter: blur(3px); transition: opacity .25s; }
+.overlay.hidden { opacity: 0; pointer-events: none; }
+.overlay-symbol { color: var(--accent); font-family: "DM Mono", monospace; font-size: 4rem; line-height: 1; text-shadow: 0 0 30px rgba(110, 231, 209, .55); }
+.overlay-symbol.danger { color: var(--danger); text-shadow: 0 0 30px rgba(255, 93, 112, .55); }
+.overlay h2 { margin: 13px 0 5px; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: .06em; }
+.overlay p { margin: 0; color: #b6c1d5; font-size: .86rem; }
+.overlay p b { color: var(--accent); font-family: "DM Mono", monospace; font-size: 1.2rem; }
+.retry-button { margin-top: 22px; border-radius: 8px; padding: 11px 18px; }
+.arena-note { display: flex; align-items: center; gap: 8px; margin: 13px 4px 0; color: var(--muted); font-size: .72rem; }
+.arena-note span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); }
+
+@media (max-width: 760px) {
+  .app-shell { width: min(100% - 24px, 620px); padding-top: 16px; }
+  .topbar { padding-bottom: 15px; }
+  .topbar p { display: none; }
+  .game-layout { grid-template-columns: 1fr; gap: 17px; padding-top: 18px; }
+  .control-panel { padding: 16px; }
+  .panel-heading h1 { margin-bottom: 13px; }
+  .difficulty-list { grid-template-columns: repeat(3, 1fr); }
+  .difficulty { display: block; padding: 8px; }
+  .difficulty span, .difficulty small { display: block; margin: 0 0 2px; }
+  .difficulty strong { font-size: .69rem; }
+  .difficulty small { font-size: .58rem; }
+  .rule-card { display: none; }
+  .start-button { margin-top: 15px; }
+  .arena { min-height: 410px; height: 60vh; }
+}

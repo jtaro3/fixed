@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101827" />
+    <title>CORE DEFENSE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">⊙</span> CORE DEFENSE</div>
+        <p>中心のコアを守れ。</p>
+      </header>
+
+      <section class="game-layout" aria-label="ゲーム画面">
+        <aside class="panel control-panel">
+          <div class="panel-heading">
+            <span class="eyebrow">DIFFICULTY</span>
+            <h1>防衛レベル</h1>
+          </div>
+          <div class="difficulty-list" role="radiogroup" aria-label="難易度">
+            <button class="difficulty" data-difficulty="easy" role="radio" aria-checked="false">
+              <span>01</span><strong>EASY</strong><small>最大 3 体</small>
+            </button>
+            <button class="difficulty selected" data-difficulty="normal" role="radio" aria-checked="true">
+              <span>02</span><strong>NORMAL</strong><small>最大 5 体</small>
+            </button>
+            <button class="difficulty" data-difficulty="hard" role="radio" aria-checked="false">
+              <span>03</span><strong>HARD</strong><small>最大 7 体</small>
+            </button>
+          </div>
+
+          <div class="rule-card">
+            <span class="eyebrow">MISSION</span>
+            <p>赤い <b>×</b> をタップして、中央のコアへの侵入を防ごう。</p>
+            <p class="quiet">敵はコアから離れた位置に出現し、接触するとゲーム終了。</p>
+          </div>
+          <button id="startButton" class="start-button">ゲームを開始 <span>→</span></button>
+        </aside>
+
+        <section class="arena-column">
+          <div class="hud" aria-live="polite">
+            <div class="hud-item"><span>TIME</span><strong id="timeDisplay">00:00</strong></div>
+            <div class="hud-item"><span>DESTROYED</span><strong id="scoreDisplay">000</strong></div>
+            <div class="hud-item"><span>THREATS</span><strong id="threatDisplay">0 / 5</strong></div>
+          </div>
+          <div id="arena" class="arena" aria-label="敵をタップしてコアを守るゲームエリア">
+            <canvas id="gameCanvas"></canvas>
+            <div id="startOverlay" class="overlay">
+              <span class="overlay-symbol">⊙</span>
+              <h2>CORE DEFENSE</h2>
+              <p>開始ボタンを押して防衛を開始</p>
+            </div>
+            <div id="gameOverOverlay" class="overlay hidden" aria-live="assertive">
+              <span class="overlay-symbol danger">×</span>
+              <span class="eyebrow">MISSION FAILED</span>
+              <h2>コアが破壊された</h2>
+              <p><b id="finalScore">0</b> 体の敵を迎撃しました</p>
+              <button id="retryButton" class="retry-button">もう一度挑戦</button>
+            </div>
+          </div>
+          <p class="arena-note"><span></span> 敵は設定した間隔で出現します。画面内の最大数を超えては出現しません。</p>
+        </section>
+      </section>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
