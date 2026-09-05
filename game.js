@@ -42,6 +42,8 @@ const state = {
   pixelRatio: 1,
 };
 
+let lastCanvasTapAt = 0;
+
 function settings() { return DIFFICULTIES[state.difficulty]; }
 
 function setGameZoomLock(locked) {
@@ -224,6 +226,21 @@ function tapEnemy(event) {
   }
 }
 
+// iOS系ブラウザを含め、ゲーム中の連続タップ／ピンチによる画面ズームを止める。
+function preventGameGesture(event) {
+  if (!state.playing) return;
+  if (event.type === 'dblclick' || event.type.startsWith('gesture') || event.touches?.length > 1) {
+    event.preventDefault();
+  }
+}
+
+function preventDoubleTapZoom(event) {
+  if (!state.playing) return;
+  const now = performance.now();
+  if (now - lastCanvasTapAt < 350) event.preventDefault();
+  lastCanvasTapAt = now;
+}
+
 difficultyButtons.forEach((button) => {
   button.addEventListener('click', () => {
     if (state.playing) return;
@@ -240,6 +257,12 @@ difficultyButtons.forEach((button) => {
 startButton.addEventListener('click', togglePause);
 retryButton.addEventListener('click', startGame);
 canvas.addEventListener('pointerdown', tapEnemy);
+canvas.addEventListener('touchend', preventDoubleTapZoom, { passive: false });
+document.addEventListener('dblclick', preventGameGesture, { passive: false });
+document.addEventListener('touchmove', preventGameGesture, { passive: false });
+document.addEventListener('gesturestart', preventGameGesture, { passive: false });
+document.addEventListener('gesturechange', preventGameGesture, { passive: false });
+document.addEventListener('gestureend', preventGameGesture, { passive: false });
 new ResizeObserver(resizeCanvas).observe(arena);
 resizeCanvas();
 requestAnimationFrame((now) => { state.lastFrameAt = now; requestAnimationFrame(update); });
