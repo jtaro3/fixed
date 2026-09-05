@@ -13,9 +13,9 @@ const difficultyButtons = [...document.querySelectorAll('.difficulty')];
 
 // ここを変えるだけで、難易度ごとの最大数や出現間隔を調整できます。
 const DIFFICULTIES = {
-  easy: { label: 'EASY', maxEnemies: 3, spawnEvery: 5000, speed: 22 },
-  normal: { label: 'NORMAL', maxEnemies: 5, spawnEvery: 5000, speed: 34 },
-  hard: { label: 'HARD', maxEnemies: 7, spawnEvery: 4200, speed: 49 },
+  easy: { label: 'EASY', maxEnemies: 3, spawnEvery: 2000, speed: 22 },
+  normal: { label: 'NORMAL', maxEnemies: 5, spawnEvery: 2000, speed: 34 },
+  hard: { label: 'HARD', maxEnemies: 7, spawnEvery: 2000, speed: 49 },
 };
 
 // 敵の現在耐久値ごとの表示色。攻撃を受けると耐久が1減り、色も変わります。
@@ -31,9 +31,10 @@ const state = {
   difficulty: 'normal',
   enemies: [],
   playing: false,
+  paused: false,
   score: 0,
-  startedAt: 0,
-  lastSpawnAt: 0,
+  elapsed: 0,
+  spawnElapsed: 0,
   lastFrameAt: 0,
   width: 0,
   height: 0,
@@ -125,16 +126,6 @@ function drawEnemy(enemy, now) {
   ctx.shadowBlur = 0;
   ctx.restore();
 
-  // 色だけでなく数字でも、あと何回タップすれば破壊できるかを示す。
-  const badgeRadius = Math.max(9, size * .42);
-  const badgeX = enemy.x + size * .72;
-  const badgeY = enemy.y - size * .72;
-  ctx.save();
-  ctx.fillStyle = '#101827'; ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.arc(badgeX, badgeY, badgeRadius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = color; ctx.font = `700 ${Math.max(10, badgeRadius)}px "DM Mono", monospace`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(enemy.health, badgeX, badgeY + .5);
-  ctx.restore();
 }
 
 function draw(now = performance.now()) {
@@ -146,16 +137,18 @@ function draw(now = performance.now()) {
 
 function endGame() {
   state.playing = false;
+  state.paused = false;
   finalScore.textContent = state.score;
   gameOverOverlay.classList.remove('hidden');
-  startButton.classList.remove('is-playing');
   startButton.textContent = 'ゲームを開始 →';
 }
 
 function update(now) {
   const elapsed = now - state.lastFrameAt;
   state.lastFrameAt = now;
-  if (state.playing) {
+  if (state.playing && !state.paused) {
+    state.elapsed += elapsed;
+    state.spawnElapsed += elapsed;
     const c = core();
     const distanceStep = settings().speed * (elapsed / 1000);
     state.enemies.forEach((enemy) => {
@@ -166,11 +159,11 @@ function update(now) {
       enemy.y += (dy / distance) * distanceStep;
     });
     if (state.enemies.some((enemy) => Math.hypot(enemy.x - c.x, enemy.y - c.y) <= enemy.radius + c.radius)) endGame();
-    if (now - state.lastSpawnAt >= settings().spawnEvery) {
+    if (state.spawnElapsed >= settings().spawnEvery) {
       spawnEnemy();
-      state.lastSpawnAt = now;
+      state.spawnElapsed = 0;
     }
-    timeDisplay.textContent = formatTime(now - state.startedAt);
+    timeDisplay.textContent = formatTime(state.elapsed);
   }
   updateHud();
   draw(now);
@@ -181,17 +174,26 @@ function startGame() {
   state.enemies = [];
   state.score = 0;
   state.playing = true;
-  state.startedAt = performance.now();
-  state.lastSpawnAt = state.startedAt;
+  state.paused = false;
+  state.elapsed = 0;
+  state.spawnElapsed = 0;
   spawnEnemy();
   startOverlay.classList.add('hidden');
   gameOverOverlay.classList.add('hidden');
-  startButton.textContent = '防衛中…';
-  startButton.classList.add('is-playing');
+  startButton.textContent = '一時停止';
   if (window.matchMedia('(max-width: 760px)').matches) {
     arena.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   updateHud();
+}
+
+function togglePause() {
+  if (!state.playing) {
+    startGame();
+    return;
+  }
+  state.paused = !state.paused;
+  startButton.textContent = state.paused ? 'ゲームを再開' : '一時停止';
 }
 
 function tapEnemy(event) {
@@ -224,7 +226,7 @@ difficultyButtons.forEach((button) => {
   });
 });
 
-startButton.addEventListener('click', () => { if (!state.playing) startGame(); });
+startButton.addEventListener('click', togglePause);
 retryButton.addEventListener('click', startGame);
 canvas.addEventListener('pointerdown', tapEnemy);
 new ResizeObserver(resizeCanvas).observe(arena);

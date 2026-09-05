@@ -73,7 +73,7 @@ button { font: inherit; }
 .hud-item:last-child { text-align: right; }
 .hud-item span { color: var(--muted); font-family: "DM Mono", monospace; font-size: .61rem; letter-spacing: .14em; }
 .hud-item strong { font-family: "DM Mono", monospace; font-size: 1.07rem; letter-spacing: .04em; }
-.arena { position: relative; overflow: hidden; height: min(65vh, 660px); min-height: 440px; border: 1px solid rgba(174, 211, 228, .27); border-radius: 16px; background: radial-gradient(circle at center, rgba(77, 147, 172, .13), transparent 36%), rgba(7, 15, 27, .88); box-shadow: inset 0 0 70px rgba(0,0,0,.28), 0 22px 60px rgba(0,0,0,.18); }
+.arena { position: relative; overflow: hidden; height: min(58vh, 570px); min-height: 390px; border: 1px solid rgba(174, 211, 228, .27); border-radius: 16px; background: radial-gradient(circle at center, rgba(77, 147, 172, .13), transparent 36%), rgba(7, 15, 27, .88); box-shadow: inset 0 0 70px rgba(0,0,0,.28), 0 22px 60px rgba(0,0,0,.18); }
 .arena::before, .arena::after { content: ""; position: absolute; z-index: 1; pointer-events: none; }
 .arena::before { inset: 18px; border: 1px solid rgba(174, 211, 228, .12); border-radius: 9px; }
 .arena::after { inset: 0; opacity: .4; background-image: linear-gradient(rgba(113, 158, 180, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(113, 158, 180, .08) 1px, transparent 1px); background-size: 42px 42px; mask-image: radial-gradient(circle, black, transparent 82%); }
@@ -102,7 +102,6 @@ canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-act
   .difficulty strong { font-size: .69rem; }
   .difficulty small { font-size: .58rem; }
   .rule-card { display: none; }
-  .start-button { position: fixed; z-index: 10; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; margin: 0; box-shadow: 0 8px 27px rgba(0, 0, 0, .35); transition: transform .25s ease, opacity .2s ease; }
-  .start-button.is-playing { pointer-events: none; opacity: 0; transform: translateY(calc(100% + 25px)); }
-  .arena { min-height: 410px; height: 60vh; }
+  .start-button { position: fixed; z-index: 10; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; margin: 0; box-shadow: 0 8px 27px rgba(0, 0, 0, .35); }
+  .arena { min-height: 330px; height: 52dvh; }
 }
