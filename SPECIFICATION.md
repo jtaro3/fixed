@@ -3,7 +3,7 @@
 | 項目 | 内容 |
 | --- | --- |
 | プロダクト名 | CORE DEFENSE |
-| 現行バージョン | v1.2.3 |
+| 現行バージョン | v1.2.4 |
 | 種別 | スマホ・PC対応のブラウザ防衛ゲーム |
 | 公開先 | GitHub Pages |
 | 基準実装 | `index.html` / `styles.css` / `game.js` |
@@ -152,7 +152,9 @@
 | ファイル | 役割 |
 | --- | --- |
 | `index.html` | 画面のHTML構造、Google Fontsの読み込み |
-| `styles.css` | レイアウト、配色、レスポンシブ表示、コンポーネント見た目 |
+| `design/tokens.css` | 共通の配色、フォント、角丸などのデザイントークン |
+| `design/styles.css` | レイアウト、レスポンシブ表示、コンポーネント見た目 |
+| `design/theme.js` | Canvas内のコア・敵の色と発光テーマ |
 | `game.js` | Canvas描画、敵の生成・移動、タップ判定、ズーム抑止 |
 | `CHANGELOG.md` | バージョンごとの更新履歴 |
 | `SPECIFICATION.md` | 本仕様書 |

@@ -1,11 +1,4 @@
-:root {
-  --ink: #ebf1ff;
-  --muted: #8794ab;
-  --line: rgba(177, 197, 229, .17);
-  --accent: #6ee7d1;
-  --danger: #ff5d70;
-  --panel: rgba(20, 31, 51, .86);
-}
+@import url("./tokens.css");
 
 * { box-sizing: border-box; }
 
@@ -37,7 +30,7 @@ button { font: inherit; }
 .topbar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 27px; border-bottom: 1px solid var(--line); }
 .header-status { display: flex; align-items: center; gap: 13px; }
 .topbar p { margin: 0; color: var(--muted); font-family: "DM Mono", monospace; font-size: .72rem; letter-spacing: .08em; }
-.version-badge { padding: 5px 8px; color: #a8b6cb; font-family: "DM Mono", monospace; font-size: .61rem; letter-spacing: .08em; border: 1px solid var(--line); border-radius: 5px; background: rgba(255,255,255,.025); }
+.version-badge { padding: 5px 8px; color: var(--version-text); font-family: var(--font-mono); font-size: .61rem; letter-spacing: .08em; border: 1px solid var(--line); border-radius: 5px; background: rgba(255,255,255,.025); }
 .brand { font-size: 1.05rem; font-weight: 800; letter-spacing: .13em; }
 .brand-mark { color: var(--accent); font-size: 1.7rem; vertical-align: -3px; margin-right: 6px; }
 
@@ -60,7 +53,7 @@ button { font: inherit; }
 .durability-legend { display: flex; align-items: center; gap: 5px; margin: 10px 0 2px; }
 .durability-legend span { display: grid; width: 19px; height: 19px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-family: "DM Mono", monospace; font-size: .61rem; font-weight: 700; }
 .durability-legend small { margin-left: 3px; color: var(--muted); font-size: .66rem; }
-.hp-1 { color: #54a6ff; }.hp-2 { color: #62d98b; }.hp-3 { color: #ffd85b; }.hp-4 { color: #ff6678; }.hp-5 { color: #abb5c6; }
+.hp-1 { color: var(--enemy-hp-1); }.hp-2 { color: var(--enemy-hp-2); }.hp-3 { color: var(--enemy-hp-3); }.hp-4 { color: var(--enemy-hp-4); }.hp-5 { color: var(--enemy-hp-5); }
 .start-button, .retry-button { color: #06221e; font-weight: 800; letter-spacing: .04em; border: 0; cursor: pointer; background: var(--accent); transition: transform .18s, box-shadow .18s; }
 .start-button { width: 100%; padding: 14px; margin-top: auto; border-radius: 9px; }
 .start-button span { font-size: 1.2rem; margin-left: 7px; }
@@ -89,7 +82,7 @@ body.game-active canvas { touch-action: none; }
 .retry-button { margin-top: 22px; border-radius: 8px; padding: 11px 18px; }
 .arena-note { display: flex; align-items: center; gap: 8px; margin: 13px 4px 0; color: var(--muted); font-size: .72rem; }
 .arena-note span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); }
-.site-footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 26px; padding: 16px 19px; color: #69778e; font-family: "DM Mono", monospace; font-size: .61rem; letter-spacing: .1em; background: #050913; border: 1px solid rgba(116, 141, 177, .18); border-radius: 10px; }
+.site-footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 26px; padding: 16px 19px; color: var(--footer-text); font-family: var(--font-mono); font-size: .61rem; letter-spacing: .1em; background: var(--footer-bg); border: 1px solid rgba(116, 141, 177, .18); border-radius: 10px; }
 
 @media (max-width: 760px) {
   .app-shell { width: min(100% - 24px, 620px); padding-top: 16px; }

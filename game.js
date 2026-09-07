@@ -11,21 +11,13 @@ const threatDisplay = document.querySelector('#threatDisplay');
 const finalScore = document.querySelector('#finalScore');
 const difficultyButtons = [...document.querySelectorAll('.difficulty')];
 const viewportMeta = document.querySelector('meta[name="viewport"]');
+const THEME = window.CORE_DEFENSE_THEME;
 
 // ここを変えるだけで、難易度ごとの最大数や出現間隔を調整できます。
 const DIFFICULTIES = {
   easy: { label: 'EASY', maxEnemies: 3, spawnEvery: 2000, speed: 22 },
   normal: { label: 'NORMAL', maxEnemies: 5, spawnEvery: 2000, speed: 34 },
   hard: { label: 'HARD', maxEnemies: 7, spawnEvery: 2000, speed: 49 },
-};
-
-// 敵の現在耐久値ごとの表示色。攻撃を受けると耐久が1減り、色も変わります。
-const ENEMY_COLORS = {
-  1: '#54a6ff',
-  2: '#62d98b',
-  3: '#ffd85b',
-  4: '#ff6678',
-  5: '#abb5c6',
 };
 
 const state = {
@@ -110,24 +102,26 @@ function formatTime(milliseconds) {
 }
 
 function drawCore(c, now) {
+  const coreTheme = THEME.canvas.core;
   const glow = 12 + Math.sin(now / 500) * 4;
   ctx.save();
   ctx.translate(c.x, c.y);
-  ctx.strokeStyle = 'rgba(110, 231, 209, .16)';
+  ctx.strokeStyle = coreTheme.outerRing;
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.arc(0, 0, c.radius + 34 + Math.sin(now / 850) * 3, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = coreTheme.innerRing;
   ctx.beginPath(); ctx.arc(0, 0, c.radius + 15, 0, Math.PI * 2); ctx.stroke();
   const gradient = ctx.createRadialGradient(0, 0, 1, 0, 0, c.radius + 2);
-  gradient.addColorStop(0, '#f4ffff'); gradient.addColorStop(.25, '#93f3e1'); gradient.addColorStop(1, '#29a99a');
-  ctx.shadowBlur = glow; ctx.shadowColor = '#6ee7d1'; ctx.fillStyle = gradient;
+  gradient.addColorStop(0, coreTheme.gradient[0]); gradient.addColorStop(.25, coreTheme.gradient[1]); gradient.addColorStop(1, coreTheme.gradient[2]);
+  ctx.shadowBlur = glow; ctx.shadowColor = coreTheme.glow; ctx.fillStyle = gradient;
   ctx.beginPath(); ctx.arc(0, 0, c.radius, 0, Math.PI * 2); ctx.fill();
-  ctx.shadowBlur = 0; ctx.fillStyle = '#103c42'; ctx.beginPath(); ctx.arc(0, 0, c.radius * .38, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0; ctx.fillStyle = coreTheme.center; ctx.beginPath(); ctx.arc(0, 0, c.radius * .38, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
 
 function drawEnemy(enemy, now) {
   const size = enemy.radius * (1 + Math.sin(now / 170 + enemy.pulse) * .04);
-  const color = ENEMY_COLORS[enemy.health];
+  const color = THEME.canvas.enemies[enemy.health];
   ctx.save();
   ctx.translate(enemy.x, enemy.y);
   ctx.rotate(Math.PI / 4);

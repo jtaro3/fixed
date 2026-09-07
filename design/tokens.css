@@ -1,0 +1,26 @@
+:root {
+  /* 基本配色 */
+  --ink: #ebf1ff;
+  --muted: #8794ab;
+  --line: rgba(177, 197, 229, .17);
+  --accent: #6ee7d1;
+  --danger: #ff5d70;
+  --panel: rgba(20, 31, 51, .86);
+  --page-bg: #0a101c;
+  --footer-bg: #050913;
+  --footer-text: #69778e;
+  --version-text: #a8b6cb;
+
+  /* 敵の耐久色 */
+  --enemy-hp-1: #54a6ff;
+  --enemy-hp-2: #62d98b;
+  --enemy-hp-3: #ffd85b;
+  --enemy-hp-4: #ff6678;
+  --enemy-hp-5: #abb5c6;
+
+  /* 文字と形 */
+  --font-ui: Outfit, sans-serif;
+  --font-mono: "DM Mono", monospace;
+  --radius-panel: 16px;
+  --radius-control: 9px;
+}
