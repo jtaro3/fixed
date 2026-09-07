@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="coreFill" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F4FFFF"/>
+      <stop offset="0.25" stop-color="#93F3E1"/>
+      <stop offset="1" stop-color="#29A99A"/>
+    </radialGradient>
+    <filter id="coreGlow" x="-45%" y="-45%" width="190%" height="190%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feFlood flood-color="#6EE7D1" flood-opacity="0.75" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="86" stroke="#6EE7D1" stroke-opacity="0.16"/>
+  <circle cx="100" cy="100" r="64" stroke="#6EE7D1" stroke-opacity="0.16"/>
+  <circle cx="100" cy="100" r="50" fill="url(#coreFill)" filter="url(#coreGlow)"/>
+  <circle cx="100" cy="100" r="19" fill="#103C42"/>
+</svg>

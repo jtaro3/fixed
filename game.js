@@ -12,6 +12,7 @@ const finalScore = document.querySelector('#finalScore');
 const difficultyButtons = [...document.querySelectorAll('.difficulty')];
 const viewportMeta = document.querySelector('meta[name="viewport"]');
 const THEME = window.CORE_DEFENSE_THEME;
+const SPRITES = loadSprites(THEME.assets);
 
 // ここを変えるだけで、難易度ごとの最大数や出現間隔を調整できます。
 const DIFFICULTIES = {
@@ -35,6 +36,23 @@ const state = {
 };
 
 let lastCanvasTapAt = 0;
+
+function loadImage(source) {
+  const image = new Image();
+  image.src = source;
+  return image;
+}
+
+function loadSprites(assetPaths) {
+  return {
+    core: loadImage(assetPaths.core),
+    enemies: Object.fromEntries(Object.entries(assetPaths.enemies).map(([health, source]) => [health, loadImage(source)])),
+  };
+}
+
+function isReady(image) {
+  return image.complete && image.naturalWidth > 0;
+}
 
 function settings() { return DIFFICULTIES[state.difficulty]; }
 
@@ -102,6 +120,17 @@ function formatTime(milliseconds) {
 }
 
 function drawCore(c, now) {
+  const image = SPRITES.core;
+  if (isReady(image)) {
+    const size = (c.radius + 42) * 2;
+    ctx.drawImage(image, c.x - size / 2, c.y - size / 2, size, size);
+    return;
+  }
+
+  drawCoreFallback(c, now);
+}
+
+function drawCoreFallback(c, now) {
   const coreTheme = THEME.canvas.core;
   const glow = 12 + Math.sin(now / 500) * 4;
   ctx.save();
@@ -120,6 +149,18 @@ function drawCore(c, now) {
 }
 
 function drawEnemy(enemy, now) {
+  const image = SPRITES.enemies[enemy.health];
+  const pulse = 1 + Math.sin(now / 170 + enemy.pulse) * .04;
+  if (isReady(image)) {
+    const size = enemy.radius * 3 * pulse;
+    ctx.drawImage(image, enemy.x - size / 2, enemy.y - size / 2, size, size);
+    return;
+  }
+
+  drawEnemyFallback(enemy, now);
+}
+
+function drawEnemyFallback(enemy, now) {
   const size = enemy.radius * (1 + Math.sin(now / 170 + enemy.pulse) * .04);
   const color = THEME.canvas.enemies[enemy.health];
   ctx.save();
