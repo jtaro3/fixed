@@ -22,3 +22,5 @@
 `index.html` をブラウザで開くだけで遊べます。
 
 更新内容は [CHANGELOG.md](CHANGELOG.md) に記録します。
+
+デザインとゲームルールの詳細は [SPECIFICATION.md](SPECIFICATION.md) を参照してください。
